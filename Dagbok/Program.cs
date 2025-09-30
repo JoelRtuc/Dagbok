@@ -3,6 +3,7 @@
     internal class Program
     {
         static List<DiaryEntry> allEntries = new List<DiaryEntry>();
+        static Dictionary<DateTime, DiaryEntry> EntryDictionary = new Dictionary<DateTime, DiaryEntry>();
 
         static void Main(string[] args)
         {
@@ -15,6 +16,7 @@
             {
                 DiaryEntry entry = new DiaryEntry(File.ReadAllLines(path), Path.GetFileName(path));
                 allEntries.Add(entry);
+                EntryDictionary.Add(entry.time, entry);
             }
 
 
@@ -83,17 +85,18 @@
 
         private static void AddTask()
         {
+            Console.WriteLine("Ange Titel");
+            string? title = Console.ReadLine() + ".txt";
             Console.WriteLine("Ange uppgift:");
             string? task = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(task))
+            if (string.IsNullOrWhiteSpace(task) || string.IsNullOrWhiteSpace(title))
             {
                 Console.WriteLine("Uppgiften kan inte vara tom.");
                 return;
             }
             try
             {
-                string taskWithTimestamp = $"{DateTime.Now}: {task}{Environment.NewLine}";
-                File.AppendAllText("Todo.txt", taskWithTimestamp + Environment.NewLine);
+                File.AppendAllText(title, task + Environment.NewLine);
                 Console.WriteLine("Uppgift tillagd.");
             }
             catch
