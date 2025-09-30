@@ -8,5 +8,8 @@ namespace Dagbok
 {
     internal class DiaryEntry
     {
+        public FileStream diaryEntry;
+        public string title;
+        public DateTime time;
     }
 }
