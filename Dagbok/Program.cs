@@ -2,11 +2,10 @@
 {
     internal class Program
     {
+        static List<DiaryEntry> allEntries = new List<DiaryEntry>();
 
         static void Main(string[] args)
         {
-            List<DiaryEntry> allEntries = new List<DiaryEntry>();
-
 
             string directoryPath = AppDomain.CurrentDomain.BaseDirectory;
             string searchPattern = "*.txt";
@@ -52,25 +51,28 @@
         {
             try
             {
-                if (!File.Exists("Todo.txt"))
+                foreach(DiaryEntry entry in allEntries)
                 {
-                    Console.WriteLine("Inga uppgifter hittades.");
-                    return;
-                }
-                string[] tasks = File.ReadAllLines("Todo.txt");
+                    if (!File.Exists(entry.title))
+                    {
+                        Console.WriteLine("Inga uppgifter hittades.");
+                        return;
+                    }
+                    string[] tasks = File.ReadAllLines(entry.title);
 
-                if (tasks.Length == 0)
-                {
-                    Console.WriteLine("Inga Uppgifter i listan");
-                    return;
-                }
+                    if (tasks.Length == 0)
+                    {
+                        Console.WriteLine("Inga Uppgifter i listan");
+                        return;
+                    }
 
-                Console.WriteLine("Uppgifter:");
-                for (int i = 0; i < tasks.Length; i++)
-                {
-                    Console.WriteLine($"{i + 1}. {tasks[i]}");
+                    Console.WriteLine("Uppgifter:");
+                    for (int i = 0; i < tasks.Length; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {tasks[i]}");
+                    }
+                    Console.WriteLine($"\n Totalt: {tasks.Length} uppgifter");
                 }
-                Console.WriteLine($"\n Totalt: {tasks.Length} uppgifter");
 
             }
             catch
