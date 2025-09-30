@@ -5,6 +5,19 @@
 
         static void Main(string[] args)
         {
+            List<DiaryEntry> allEntries = new List<DiaryEntry>();
+
+
+            string directoryPath = AppDomain.CurrentDomain.BaseDirectory;
+            string searchPattern = "*.txt";
+
+
+            foreach (string path in Directory.GetFiles(directoryPath, "*.txt", SearchOption.AllDirectories))
+            {
+                DiaryEntry entry = new DiaryEntry(File.ReadAllLines(path), Path.GetFileName(path));
+                allEntries.Add(entry);
+            }
+
 
             while (true)
             {
