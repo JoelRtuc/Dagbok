@@ -27,7 +27,8 @@ namespace Dagbok
 
                 Console.WriteLine("1. Lägg till uppgift");
                 Console.WriteLine("2. Visa uppgifter");
-                Console.WriteLine("3. Avsluta");
+                Console.WriteLine("3. Sök efter uppgift");
+                Console.WriteLine("4. Avsluta");
 
                 MenuChoice.Choices choice = GetMenuChoice();
 
@@ -37,7 +38,31 @@ namespace Dagbok
                         AddTask();
                         break;
                     case MenuChoice.Choices.ShowTasks:
-                        ShowTasks();
+                        while (true) 
+                        {
+                            ShowTasks();
+                            int choosenOption;
+                            Console.WriteLine("1. Radera En uppgift");
+                            Console.WriteLine("2. Ändra en uppgift");
+                            Console.WriteLine("3. Visa en uppgift");
+                            Console.WriteLine("3. Avsluta");
+                            if(int.TryParse(Console.ReadLine(), out choosenOption))
+                            {
+                                switch (choosenOption)
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid choice:");
+                                break;
+                            }
+
+                        }
+                        break;
+
+                    case MenuChoice.Choices.SearchTasks:
                         break;
                     case MenuChoice.Choices.Exit:
                         Environment.Exit(0);

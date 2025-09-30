@@ -13,7 +13,8 @@ namespace Dagbok
             invalid = 0,
             AddTask = 1,
             ShowTasks = 2,
-            Exit = 3
+            SearchTasks = 3,
+            Exit = 4
         }
 
     }

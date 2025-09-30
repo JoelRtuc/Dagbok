@@ -20,5 +20,10 @@ namespace Dagbok
             this.title = title;
         }
 
+        public void Delete()
+        {
+            
+        }
+
     }
 }
