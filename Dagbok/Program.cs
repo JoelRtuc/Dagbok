@@ -1,4 +1,6 @@
-﻿namespace Dagbok
+﻿using System.Threading.Tasks;
+
+namespace Dagbok
 {
     internal class Program
     {
@@ -53,7 +55,8 @@
         {
             try
             {
-                foreach(DiaryEntry entry in allEntries)
+                Console.WriteLine("Uppgifter:");
+                foreach (DiaryEntry entry in allEntries)
                 {
                     if (!File.Exists(entry.title))
                     {
@@ -68,13 +71,14 @@
                         return;
                     }
 
-                    Console.WriteLine("Uppgifter:");
+                    Console.WriteLine(entry.time + "\t" + entry.title + "\n\n");
                     for (int i = 0; i < tasks.Length; i++)
                     {
-                        Console.WriteLine($"{i + 1}. {tasks[i]}");
+                        Console.WriteLine(tasks[i]);
                     }
-                    Console.WriteLine($"\n Totalt: {tasks.Length} uppgifter");
                 }
+                Console.WriteLine($"\nTotalt: {allEntries.Count} uppgifter");
+
 
             }
             catch
