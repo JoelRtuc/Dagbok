@@ -50,7 +50,7 @@ namespace Dagbok
                             change = false;
                             view = false;
                             bool exit = false;
-                            if(int.TryParse(Console.ReadLine(), out choosenOption))
+                            if(int.TryParse(Console.ReadLine(), out choosenOption) && choosenOption > 0)
                             {
                                 switch (choosenOption)
                                 {
@@ -129,15 +129,17 @@ namespace Dagbok
             try
             {
                 Console.WriteLine("Uppgifter:");
+                int option = 0;
                 foreach (DiaryEntry entry in allEntries)
                 {
+                    option++;
                     if (!File.Exists(entry.title))
                     {
                         Console.WriteLine("Inga uppgifter hittades.");
                         return;
                     }
 
-                    Console.WriteLine(entry.time + "\t" + entry.title);
+                    Console.WriteLine(option + ": " + entry.time + "\t" + entry.title);
                 }
                 Console.WriteLine($"\nTotalt: {allEntries.Count} uppgifter");
 
