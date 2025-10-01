@@ -45,7 +45,7 @@ namespace Dagbok
                             Console.WriteLine("1. Radera En uppgift");
                             Console.WriteLine("2. Ändra en uppgift");
                             Console.WriteLine("3. Visa en uppgift");
-                            Console.WriteLine("4. Avsluta");
+                            Console.WriteLine("4. Gå tillbaka");
                             delete = false;
                             change = false;
                             view = false;
@@ -83,7 +83,7 @@ namespace Dagbok
                             int choosenEntry;
                             try
                             {
-                                choosenEntry = int.Parse(Console.ReadLine());
+                                choosenEntry = int.Parse(Console.ReadLine()) - 1;
                             }
                             catch
                             {
@@ -110,7 +110,7 @@ namespace Dagbok
                         break;
 
                     case MenuChoice.Choices.SearchTasks:
-                        SearchTask();
+                        SearchTask(allEntries[0]);
                         break;
                     case MenuChoice.Choices.Exit:
                         Environment.Exit(0);
@@ -154,9 +154,9 @@ namespace Dagbok
         static void DisplayFullEntry(DiaryEntry entry)
         {
             Console.WriteLine($"{entry.time}\t{entry.title}");
-            foreach(string line in entry.mainText)
+            for(int i = 1; i < entry.mainText.Length; i++)
             {
-                Console.WriteLine(line);
+                Console.WriteLine(entry.mainText[i]);
             }
         }
 
@@ -195,19 +195,47 @@ namespace Dagbok
                 Console.WriteLine("Uppgiften kan inte vara tom.");
                 return;
             }
-            try
-            {
-                File.AppendAllText(title, task + Environment.NewLine);
+
+                File.AppendAllText( title, DateTime.Now.ToString() + Environment.NewLine + task + Environment.NewLine);
                 Console.WriteLine("Uppgift tillagd.");
-            }
-            catch
-            {
-                Console.WriteLine("Kunde inte lägga till uppgiften.");
-            }
+
         }
 
-        static void SearchTask()
+        static void SearchTask(DiaryEntry entry)
         {
+
+            string day, month, year;
+            Console.WriteLine("Write a time year (if you dont want to write x):");
+            year = Console.ReadLine();
+            Console.WriteLine("Write a month (if you dont want to write x):");
+            month = Console.ReadLine();
+            Console.WriteLine("Write a day (if you dont want to write x):");
+            day = Console.ReadLine();
+
+            int i = 0;
+            foreach (DiaryEntry entry1 in EntryDictionary.Values) // or .Keys/.Entries depending on your dictionary
+            {
+                i++;
+                bool match = true;
+
+                if (year != "x" && entry1.time.Year != int.Parse(year))
+                    match = false;
+
+                if (month != "x" && entry1.time.Month != int.Parse(month))
+                    match = false;
+
+                if (day != "x" && entry1.time.Day != int.Parse(day))
+                    match = false;
+
+                if (match)
+                {
+                    Console.WriteLine($"{i} +: Entry {entry1} matches filter!"); // you can show title or task instead
+                }
+                else
+                {
+                    Console.WriteLine("No match.");
+                }
+            }
 
         }
 
