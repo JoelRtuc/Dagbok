@@ -22,7 +22,7 @@ namespace Dagbok
 
         public void Delete()
         {
-            
+            File.Delete(title);
         }
 
     }

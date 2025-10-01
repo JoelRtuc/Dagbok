@@ -6,6 +6,7 @@ namespace Dagbok
     {
         static List<DiaryEntry> allEntries = new List<DiaryEntry>();
         static Dictionary<DateTime, DiaryEntry> EntryDictionary = new Dictionary<DateTime, DiaryEntry>();
+        static bool delete, change, view;
 
         static void Main(string[] args)
         {
@@ -26,8 +27,8 @@ namespace Dagbok
             {
 
                 Console.WriteLine("1. Lägg till uppgift");
-                Console.WriteLine("2. Visa uppgifter");
-                Console.WriteLine("3. Sök efter uppgift");
+                Console.WriteLine("2. Visa uppgifter och altenativ");
+                Console.WriteLine("3. Sök efter uppgift (datum)");
                 Console.WriteLine("4. Avsluta");
 
                 MenuChoice.Choices choice = GetMenuChoice();
@@ -40,18 +41,33 @@ namespace Dagbok
                     case MenuChoice.Choices.ShowTasks:
                         while (true) 
                         {
-                            ShowTasks();
                             int choosenOption;
                             Console.WriteLine("1. Radera En uppgift");
                             Console.WriteLine("2. Ändra en uppgift");
                             Console.WriteLine("3. Visa en uppgift");
-                            Console.WriteLine("3. Avsluta");
+                            Console.WriteLine("4. Avsluta");
+                            delete = false;
+                            change = false;
+                            view = false;
+                            bool exit = false;
                             if(int.TryParse(Console.ReadLine(), out choosenOption))
                             {
                                 switch (choosenOption)
                                 {
-
+                                    case 1:
+                                        delete = true;
+                                        break;
+                                    case 2:
+                                        change = true;
+                                        break;
+                                    case 3:
+                                        view = true;
+                                        break;
+                                    case 4:
+                                        exit = true;
+                                        break;
                                 }
+                                ShowTasks();
                             }
                             else
                             {
@@ -59,10 +75,42 @@ namespace Dagbok
                                 break;
                             }
 
+                            if (exit)
+                            {
+                                break;
+                            }
+
+                            int choosenEntry;
+                            try
+                            {
+                                choosenEntry = int.Parse(Console.ReadLine());
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+
+                            if (view)
+                            {
+                                DisplayFullEntry(allEntries[choosenEntry]);
+                            }
+
+                            if (delete)
+                            {
+                                DeleteEntry(allEntries[choosenEntry]);
+                            }
+
+                            if (change)
+                            {
+                                WriteOver(allEntries[choosenEntry]);
+                            }
+
                         }
+
                         break;
 
                     case MenuChoice.Choices.SearchTasks:
+                        SearchTask();
                         break;
                     case MenuChoice.Choices.Exit:
                         Environment.Exit(0);
@@ -88,19 +136,8 @@ namespace Dagbok
                         Console.WriteLine("Inga uppgifter hittades.");
                         return;
                     }
-                    string[] tasks = File.ReadAllLines(entry.title);
 
-                    if (tasks.Length == 0)
-                    {
-                        Console.WriteLine("Inga Uppgifter i listan");
-                        return;
-                    }
-
-                    Console.WriteLine(entry.time + "\t" + entry.title + "\n\n");
-                    for (int i = 0; i < tasks.Length; i++)
-                    {
-                        Console.WriteLine(tasks[i]);
-                    }
+                    Console.WriteLine(entry.time + "\t" + entry.title);
                 }
                 Console.WriteLine($"\nTotalt: {allEntries.Count} uppgifter");
 
@@ -112,7 +149,40 @@ namespace Dagbok
             }
         }
 
-        private static void AddTask()
+        static void DisplayFullEntry(DiaryEntry entry)
+        {
+            Console.WriteLine($"{entry.time}\t{entry.title}");
+            foreach(string line in entry.mainText)
+            {
+                Console.WriteLine(line);
+            }
+        }
+
+        static void DeleteEntry(DiaryEntry entry)
+        {
+            allEntries.Remove(entry);
+            EntryDictionary.Remove(entry.time ,out entry);
+            entry.Delete();
+        }
+
+        static void WriteOver(DiaryEntry entry)
+        {
+
+            try
+            {
+                string newText = Console.ReadLine();
+
+                File.WriteAllText(entry.title, newText);
+
+                entry.mainText = File.ReadAllLines(newText);
+            }
+            catch
+            {
+                Console.WriteLine("Uppgiften var felaktig");
+            }
+        }
+
+        static void AddTask()
         {
             Console.WriteLine("Ange Titel");
             string? title = Console.ReadLine() + ".txt";
@@ -132,6 +202,11 @@ namespace Dagbok
             {
                 Console.WriteLine("Kunde inte lägga till uppgiften.");
             }
+        }
+
+        static void SearchTask()
+        {
+
         }
 
         static MenuChoice.Choices GetMenuChoice()
