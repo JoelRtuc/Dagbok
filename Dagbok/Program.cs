@@ -39,74 +39,7 @@ namespace Dagbok
                         AddTask();
                         break;
                     case MenuChoice.Choices.ShowTasks:
-                        while (true) 
-                        {
-                            int choosenOption;
-                            Console.WriteLine("1. Radera En uppgift");
-                            Console.WriteLine("2. Ändra en uppgift");
-                            Console.WriteLine("3. Visa en uppgift");
-                            Console.WriteLine("4. Gå tillbaka");
-                            delete = false;
-                            change = false;
-                            view = false;
-                            bool exit = false;
-                            if(int.TryParse(Console.ReadLine(), out choosenOption) && choosenOption > 0)
-                            {
-                                switch (choosenOption)
-                                {
-                                    case 1:
-                                        delete = true;
-                                        break;
-                                    case 2:
-                                        change = true;
-                                        break;
-                                    case 3:
-                                        view = true;
-                                        break;
-                                    case 4:
-                                        exit = true;
-                                        break;
-                                }
-                                ShowTasks();
-                            }
-                            else
-                            {
-                                Console.WriteLine("Invalid choice:");
-                                break;
-                            }
-
-                            if (exit)
-                            {
-                                break;
-                            }
-
-                            int choosenEntry;
-                            try
-                            {
-                                choosenEntry = int.Parse(Console.ReadLine()) - 1;
-                            }
-                            catch
-                            {
-                                continue;
-                            }
-
-                            if (view)
-                            {
-                                DisplayFullEntry(allEntries[choosenEntry]);
-                            }
-
-                            if (delete)
-                            {
-                                DeleteEntry(allEntries[choosenEntry]);
-                            }
-
-                            if (change)
-                            {
-                                WriteOver(allEntries[choosenEntry]);
-                            }
-
-                        }
-
+                        AddMenu(allEntries);
                         break;
 
                     case MenuChoice.Choices.SearchTasks:
@@ -124,13 +57,13 @@ namespace Dagbok
             }
         }
 
-        private static void ShowTasks()
+        private static void ShowTasks(List<DiaryEntry> entries)
         {
             try
             {
                 Console.WriteLine("Uppgifter:");
                 int option = 0;
-                foreach (DiaryEntry entry in allEntries)
+                foreach (DiaryEntry entry in entries)
                 {
                     option++;
                     if (!File.Exists(entry.title))
@@ -141,7 +74,7 @@ namespace Dagbok
 
                     Console.WriteLine(option + ": " + entry.time + "\t" + entry.title);
                 }
-                Console.WriteLine($"\nTotalt: {allEntries.Count} uppgifter");
+                Console.WriteLine($"\nTotalt: {entries.Count} uppgifter");
 
 
             }
@@ -169,14 +102,14 @@ namespace Dagbok
 
         static void WriteOver(DiaryEntry entry)
         {
-
+            Console.WriteLine("Vad vill du skriva istället?: ");
             try
             {
-                string newText = Console.ReadLine();
+                string newText = entry.time.ToString() + "\n" + Console.ReadLine();
 
                 File.WriteAllText(entry.title, newText);
 
-                entry.mainText = File.ReadAllLines(newText);
+                entry.mainText = File.ReadAllLines(entry.title);
             }
             catch
             {
@@ -212,8 +145,9 @@ namespace Dagbok
             Console.WriteLine("Write a day (if you dont want to write x):");
             day = Console.ReadLine();
 
+            List<DiaryEntry> entries = new List<DiaryEntry>();
             int i = 0;
-            foreach (DiaryEntry entry1 in EntryDictionary.Values) // or .Keys/.Entries depending on your dictionary
+            foreach (DiaryEntry entry1 in EntryDictionary.Values)
             {
                 i++;
                 bool match = true;
@@ -229,12 +163,18 @@ namespace Dagbok
 
                 if (match)
                 {
-                    Console.WriteLine($"{i} +: Entry {entry1} matches filter!"); // you can show title or task instead
+                    Console.WriteLine($"{i} +: Entry {entry1} matches filter!");
+                    entries.Add(entry1);
                 }
-                else
-                {
-                    Console.WriteLine("No match.");
-                }
+            }
+
+            if(entries.Count > 0)
+            {
+                AddMenu(entries);
+            }
+            else
+            {
+                Console.WriteLine("No match.");
             }
 
         }
@@ -247,6 +187,77 @@ namespace Dagbok
                 return (MenuChoice.Choices)choice;
             }
             return MenuChoice.Choices.invalid;
+        }
+
+        static void AddMenu(List<DiaryEntry> entries)
+        {
+            while (true)
+            {
+                int choosenOption;
+                Console.WriteLine("1. Radera En uppgift");
+                Console.WriteLine("2. Ändra en uppgift");
+                Console.WriteLine("3. Visa en uppgift");
+                Console.WriteLine("4. Gå tillbaka");
+                delete = false;
+                change = false;
+                view = false;
+                bool exit = false;
+                if (int.TryParse(Console.ReadLine(), out choosenOption) && choosenOption > 0)
+                {
+                    switch (choosenOption)
+                    {
+                        case 1:
+                            delete = true;
+                            break;
+                        case 2:
+                            change = true;
+                            break;
+                        case 3:
+                            view = true;
+                            break;
+                        case 4:
+                            exit = true;
+                            break;
+                    }
+                    ShowTasks(entries);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice:");
+                    break;
+                }
+
+                if (exit)
+                {
+                    break;
+                }
+
+                int choosenEntry;
+                try
+                {
+                    choosenEntry = int.Parse(Console.ReadLine()) - 1;
+                }
+                catch
+                {
+                    continue;
+                }
+
+                if (view)
+                {
+                    DisplayFullEntry(entries[choosenEntry]);
+                }
+
+                if (delete)
+                {
+                    DeleteEntry(entries[choosenEntry]);
+                }
+
+                if (change)
+                {
+                    WriteOver(entries[choosenEntry]);
+                }
+
+            }
         }
 
     }
