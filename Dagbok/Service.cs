@@ -96,7 +96,7 @@ namespace Dagbok
 
         }
 
-        public void SearchTask(DiaryEntry entry)
+        public void SearchTask()
         {
 
             string day, month, year;

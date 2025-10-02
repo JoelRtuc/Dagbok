@@ -14,18 +14,18 @@ namespace Dagbok
             string directoryPath = AppDomain.CurrentDomain.BaseDirectory;
             string searchPattern = "*.txt";
 
-
-            foreach (string path in Directory.GetFiles(directoryPath, "*.txt", SearchOption.AllDirectories))
-            {
-                DiaryEntry entry = new DiaryEntry(File.ReadAllLines(path), Path.GetFileName(path));
-                allEntries.Add(entry);
-                EntryDictionary.Add(entry.time, entry);
-            }
-
-            service = new Service(EntryDictionary, allEntries);
-
             while (true)
             {
+                allEntries.Clear();
+                EntryDictionary.Clear();
+                foreach (string path in Directory.GetFiles(directoryPath, "*.txt", SearchOption.AllDirectories))
+                {
+                    DiaryEntry entry = new DiaryEntry(File.ReadAllLines(path), Path.GetFileName(path));
+                    allEntries.Add(entry);
+                    EntryDictionary.Add(entry.time, entry);
+                }
+
+                service = new Service(EntryDictionary, allEntries);
 
                 Console.WriteLine("1. Lägg till uppgift");
                 Console.WriteLine("2. Visa uppgifter och altenativ");
@@ -44,7 +44,7 @@ namespace Dagbok
                         break;
 
                     case MenuChoice.Choices.SearchTasks:
-                        service.SearchTask(allEntries[0]);
+                        service.SearchTask();
                         break;
                     case MenuChoice.Choices.Exit:
                         Environment.Exit(0);
