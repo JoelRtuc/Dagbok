@@ -62,7 +62,7 @@ Files are loaded into memory each time the program runs.
 
 Clone the repo:
 
-git clone https://github.com/YOUR_USERNAME/Dagbok.git
+git clone https://github.com/JoelRtuc/Dagbok.git
 cd Dagbok
 
 
