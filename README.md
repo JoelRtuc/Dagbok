@@ -83,10 +83,6 @@ Start adding and managing diary tasks from the console menu.
 
  Add export/import feature.
 
-📜 License
-
-This project is licensed under the MIT License – feel free to use, modify, and share.
-
 👉 Do you want me to also include a sample .txt diary entry file in the repo so people immediately understand the format?
 
 You said:
@@ -157,7 +153,7 @@ This will find all entries created on the 1st of any month in 2025.
 ## 🚀 Getting Started
 1. Clone the repo:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/Dagbok.git
+   git clone https://github.com/JoelRtuc/Dagbok
    cd Dagbok
 
 
