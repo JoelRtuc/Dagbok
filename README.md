@@ -163,17 +163,3 @@ dotnet run
 
 
 Start adding and managing diary tasks from the console menu
-
-📌 Planned Improvements
-
- Store files in a dedicated subfolder (Entries/)
-
- Support multi-line task input
-
- Allow searching by keyword in text
-
- Add export/import feature
-
----
-
-Want me to also write you a **sample `entry.txt` file** that you can include in the repo so people see what the saved diary format looks like?
