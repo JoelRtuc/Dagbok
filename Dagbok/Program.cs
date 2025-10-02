@@ -7,6 +7,7 @@ namespace Dagbok
         static List<DiaryEntry> allEntries = new List<DiaryEntry>();
         static Dictionary<DateTime, DiaryEntry> EntryDictionary = new Dictionary<DateTime, DiaryEntry>();
         static bool delete, change, view;
+        static Service service = new Service();
 
         static void Main(string[] args)
         {
