@@ -1,6 +1,3 @@
-Here’s a good starter GitHub README you can drop into your project.
-I’ll make it structured and easy to understand for someone who finds your repo:
-
 📖 Dagbok (C# Console Diary Application)
 
 A simple diary / task manager built with C#.
